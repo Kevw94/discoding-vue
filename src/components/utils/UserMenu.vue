@@ -1,7 +1,7 @@
 <template>
 <div class="userMenu flex absolute bottom-0 left-0">
     <div class="userInfos">
-        <UserCard :username="userState.user?.email" :hoverEffect="true" />
+        <UserCard :username="userState.user?.username" :hoverEffect="true" />
     </div>
 </div>
 

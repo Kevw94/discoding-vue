@@ -1,15 +1,15 @@
 import { reactive, readonly } from 'vue';
 
 interface UserState {
-    user: null | { email: string; token: string };
+    user: null | {username: string, email: string; token: string };
 }
 
 const state = reactive<UserState>({
     user: null
 })
 
-const setUser = (email: string, token: string) => {
-    state.user = { email, token };
+const setUser = (username: string, email: string, token: string) => {
+    state.user = { username, email, token };
 };
   
   const clearUser = () => {

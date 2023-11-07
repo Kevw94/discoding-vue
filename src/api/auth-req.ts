@@ -20,3 +20,11 @@ export const activate = async (token: string) => {
 		token: token
 	})
 }
+
+export const userInfos = async (token: string) => {
+	return await http.get('auth/me', {
+	  	headers: {
+			'Authorization': `Bearer ${token}`
+	  	}
+	});
+}

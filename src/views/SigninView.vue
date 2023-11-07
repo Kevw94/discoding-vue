@@ -52,36 +52,32 @@
 	</div>
   </template>
   
-<script setup lang="ts">
-  	import { ref } from 'vue';
-	import { signin } from '@/api/auth-req'
-	import useUserStore from '@/stores/user';
-	import { useRouter } from 'vue-router';
-  
-	const { setUser } = useUserStore();
-	const router = useRouter();
-	const form = ref({
-		email: '',
-		password: '',
-	});
-  
-	const submitForm = async () => {
-		try {
-			const response = await signin(form.value.email, form.value.password)
-			setUser(form.value.email, response.data.access_token);
-			console.log('Login successful:', response.data);
-			router.push('/social')
-			
-			const accessToken = response.data.access_token;
-			console.log('Login successful, token:', accessToken);
-		} catch (error) {
-			console.error('Login error:', error);
+  <script setup lang="ts">
+  import { ref } from 'vue';
+  import { signin, userInfos } from '@/api/auth-req';
+  import useUserStore from '@/stores/user';
+  import { useRouter } from 'vue-router';
 
-		}
-	};
+  const { setUser } = useUserStore();
+  const router = useRouter();
+  const form = ref({
+    email: '',
+    password: '',
+  });
 
-	const navigateToSignUp = () => {
-    	router.push('/signup');
-  	};
+  const submitForm = async () => {
+    try {
+      const response = await signin(form.value.email, form.value.password);
+      const userInfoResponse = await userInfos(response.data.access_token);
+      setUser(userInfoResponse.data.email, response.data.access_token, userInfoResponse.data);
+      console.log('Login successful:', userInfoResponse.data);
+      router.push('/social');
+    } catch (error) {
+      console.error('Login error:', error);
+    }
+  };
 
+  const navigateToSignUp = () => {
+    router.push('/signup');
+  };
 </script>

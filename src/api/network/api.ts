@@ -7,4 +7,4 @@ export const http = axios.create({
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-  });
+});
