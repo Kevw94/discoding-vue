@@ -1,11 +1,28 @@
+<!-- SocialTabs.vue -->
 <template>
-<ul class="flex gap-6">
-    <li class="hover:bg-gray-500 cursor-pointer px-2 py-1 rounded">All</li>
-    <li class="hover:bg-gray-500 cursor-pointer px-2 py-1 rounded">Online</li>
-    <li class="hover:bg-gray-500 cursor-pointer px-2 py-1 rounded">Pending</li>
-    <li class="hover:bg-gray-500 cursor-pointer px-2 py-1 rounded">Blocked</li>
-</ul>
-</template>
-
-<script lang="ts" setup>
-</script>
+    <ul class="flex gap-6">
+      <li
+        v-for="tab in tabs"
+        :key="tab"
+        :class="{ 'bg-gray-500': currentTab === tab }"
+        class="cursor-pointer px-2 py-1 rounded"
+        @click="selectTab(tab)"
+      >
+        {{ tab }}
+      </li>
+    </ul>
+  </template>
+  
+  <script setup lang="ts">
+  import { ref } from 'vue';
+  
+  const emit = defineEmits(['update:tab']);
+  const tabs = ['All', 'Online', 'Pending', 'Blocked'];
+  const currentTab = ref(tabs[0]);
+  
+  function selectTab(tab: string) {
+    currentTab.value = tab;
+    emit('update:tab', tab);
+  }
+  </script>
+  
