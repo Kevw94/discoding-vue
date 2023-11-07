@@ -1,56 +1,87 @@
 <template>
-	<div class="login-container flex items-center justify-center h-screen bg-gray-200">
-	  <form @submit.prevent="submitForm" class="bg-white p-8 rounded-lg shadow-md">
-		<h2 class="text-2xl font-bold mb-6 text-center">Connexion</h2>
+	<div class="login-container flex w-screen h-screen items-center justify-center bg-gray-900">
+	  <form @submit.prevent="submitForm" class="bg-gray-800 p-8 rounded-lg shadow-md w-full max-w-xs">
+		<h2 class="text-3xl font-bold mb-8 text-center text-white">Welcome back!</h2>
 		<div class="mb-4">
-		  <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Email</label>
 		  <input
 			type="email"
 			id="email"
 			v-model="form.email"
-			class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+			class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-300 bg-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+			placeholder="Email"
 			required
 			autofocus
 		  />
 		</div>
 		<div class="mb-6">
-		  <label for="password" class="block text-gray-700 text-sm font-bold mb-2">Mot de passe</label>
 		  <input
 			type="password"
 			id="password"
 			v-model="form.password"
-			class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+			class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-300 bg-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+			placeholder="Password"
 			required
 		  />
+		  <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" style="margin-top: -8px;">
+			Forgot your password?
+		  </a>
 		</div>
 		<div class="flex items-center justify-between">
 		  <button
 			type="submit"
-			class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+			class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 w-full rounded focus:outline-none focus:shadow-outline"
 		  >
-			Se connecter
+			Login
 		  </button>
+		</div>
+		<div class="mt-6 text-center">
+		  <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800"
+		  @click.prevent="navigateToSignUp">
+			Need an account? Register
+		  </a>
+		</div>
+		<div class="mt-6 bg-gray-700 p-4 rounded-lg text-center">
+		  <p class="text-gray-400 text-sm mb-2">Log in with QR Code</p>
+		  <!-- Here you would insert the actual QR code image -->
+		  <div class="bg-white p-2 rounded-lg">
+			<!-- Placeholder for QR Code -->
+			<img src="path_to_your_qr_code_image" alt="QR Code" class="mx-auto">
+		  </div>
 		</div>
 	  </form>
 	</div>
   </template>
   
-  <script setup lang="ts">
-  import { ref } from 'vue';
+<script setup lang="ts">
+  	import { ref } from 'vue';
+	import { signin } from '@/api/auth-req'
+	import useUserStore from '@/stores/user';
+	import { useRouter } from 'vue-router';
   
-  const form = ref({
-	email: '',
-	password: '',
-  });
+	const { setUser } = useUserStore();
+	const router = useRouter();
+	const form = ref({
+		email: '',
+		password: '',
+	});
   
-  const submitForm = () => {
-	console.log('Form submitted:', form.value);
-	// Ici, vous pouvez implémenter la logique de connexion,
-	// comme envoyer les données du formulaire à un serveur via une requête API.
-  };
-  </script>
-  
-  <style>
-  /* Ajoutez ici des styles supplémentaires si nécessaire */
-  </style>
-  
+	const submitForm = async () => {
+		try {
+			const response = await signin(form.value.email, form.value.password)
+			setUser(form.value.email, response.data.access_token);
+			console.log('Login successful:', response.data);
+			router.push('/social')
+			
+			const accessToken = response.data.access_token;
+			console.log('Login successful, token:', accessToken);
+		} catch (error) {
+			console.error('Login error:', error);
+
+		}
+	};
+
+	const navigateToSignUp = () => {
+    	router.push('/signup');
+  	};
+
+</script>

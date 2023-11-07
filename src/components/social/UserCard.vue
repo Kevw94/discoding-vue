@@ -7,18 +7,19 @@
         <img src="path_to_profile_picture.jpg" alt="User profile" class="w-full h-full object-cover">
       </div>
       <div>
-        <div class="userName text-white font-medium">Username</div>
+        <div class="userName text-white font-medium">{{ username }}</div>
         <div class="userQuote text-gray-400 text-sm overflow-hidden whitespace-nowrap overflow-ellipsis">Hello world</div>
       </div>
     </div>
   </template>
   
   <script lang="ts" setup>
-    const props = defineProps({
-      hoverEffect: {
-        type: Boolean,
-        default: true,
-      },
-    });
-  </script>
+  const props = defineProps({
+    hoverEffect: {
+      type: Boolean,
+      default: true,
+    },
+    username: String,
+  });
+</script>
   
