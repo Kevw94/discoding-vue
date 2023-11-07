@@ -1,5 +1,5 @@
 <template>
-    <section class="socialContainer h-screen w-screen flex flex-col text-white">
+    <section class="socialContainer h-screen flex flex-grow flex-col text-white">
         <div class="socialTopNav w-full h-10 bg-red flex bg-gray-600">
             <div class="searchConvo w-[15%] h-full bg-gray-800"></div>
             <div class="socialTabs flex flex-grow items-center">
@@ -12,7 +12,7 @@
             <div class="privateMessages h-full bg-gray-800 w-[15%] p-5">
                 <div class="pmList w-full h-full">
                     <span class="mb-5">Private messages</span>
-                    <userCard />
+                    <UserCard />
                 </div>
             </div>
             <div class="socialCore flex-grow p-5 bg-gray-700 flex flex-col">
@@ -27,25 +27,14 @@
     </section>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import UserCard from '@/components/social/UserCard.vue'
 import SocialTabs from '@/components/social/SocialTabs.vue';
 import UserCardLarge from '@/components/social/UserCardLarge.vue';
 import SearchBar from '@/components/utils/SearchBar.vue'
-import { defineComponent } from 'vue';
 
-export default defineComponent({
-  name: 'SocialView',
-  components: {
-    UserCard,
-    UserCardLarge,
-    SocialTabs,
-    SearchBar
-  },
-  methods: {
-    handleSearch(query: string) {
+
+function handleSearch(query: string) {
       console.log('Search query:', query);
     }
-  }
-});
 </script>
