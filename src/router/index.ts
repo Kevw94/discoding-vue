@@ -10,7 +10,27 @@ const routes: Array<RouteRecordRaw> = [
 		path: '/signup',
 		name: 'signup',
 		component: () => import('@/views/SignupView.vue')
-	}
+	},
+	{
+		path: '/server',
+		name: 'server',
+		component: () => import('@/views/ServerView.vue')
+	},
+	{
+		path: '/social',
+		name: 'social',
+		component: () => import('@/views/SocialView.vue')
+	},
+	{
+		path: '/params',
+		name: 'params',
+		component: () => import('@/views/ParamsView.vue')
+	},
+	{
+		path: '/:catchAll(.*)*',
+		component: () => import('@/views/ErrorNotFoundView.vue'),
+	},
+
 ]
 
 const router = createRouter({
