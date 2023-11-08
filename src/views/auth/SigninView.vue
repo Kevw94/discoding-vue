@@ -74,7 +74,7 @@
 			const userInfoResponse = await userInfos(signinResponse.data.access_token);
 			console.log('User info response:', userInfoResponse.data.user.profile);
 
-			setUser(userInfoResponse.data.user.profile.username, userInfoResponse.data.user.profile.email, signinResponse.data.access_token);
+			setUser(userInfoResponse.data.user.profile.username, userInfoResponse.data.user.profile.email, signinResponse.data.access_token, userInfoResponse.data.user.profile.bio, userInfoResponse.data.user.friends, userInfoResponse.data.user.blocked);
 
 			router.push('/social');
   		} catch (error) {

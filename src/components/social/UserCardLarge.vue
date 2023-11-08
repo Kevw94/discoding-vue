@@ -2,7 +2,7 @@
   <div class="userCardLarge relative flex flex-col items-center w-full hover:bg-gray-600 p-2 rounded-lg">
     <div class="divider absolute top-0 w-[98%] h-[1px] bg-gray-600"></div>
     <div class="userCard flex w-full justify-between items-center">
-      <UserCard :hoverEffect="false" :username="username" :quote="quote" />
+      <UserCard :hoverEffect="false" :username="username" :bio="bio" />
       <div class="userCardButtons flex gap-2 items-center">
         <button class="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center">
           <IconCall />

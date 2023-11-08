@@ -1,7 +1,6 @@
 <template>
     <section class="socialContainer h-screen flex flex-grow flex-col text-white">
         <div class="socialTopNav w-full h-10 bg-red flex bg-gray-600">
-            <div class="searchConvo w-[15%] h-full bg-gray-800"></div>
             <div class="socialTabs flex flex-grow items-center">
                 <IconPerson class="ml-6" />
                 <span class="friends border-r border-white mr-6 pr-6 pl-2">Friends</span>
@@ -11,14 +10,6 @@
             <div class="socialActions w-[30%]"></div>
         </div>
         <div class="socialPage w-full flex-grow flex">
-            <div class="privateMessages relative h-full bg-gray-800 w-[15%] p-5">
-                <div class="pmList w-full h-full">
-                    <span class="mb-5">Private messages</span>
-                    <UserCard />
-                    <UserMenu />
-                    
-                </div>
-            </div>
             <div class="socialCore flex-grow p-5 bg-gray-700 flex flex-col">
 
                 <SearchBar placeholder="Rechercher..." @search-update="handleSearch" />

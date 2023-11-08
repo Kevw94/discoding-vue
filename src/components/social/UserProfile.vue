@@ -1,21 +1,21 @@
 <template>
-<div class="userProfile absolute bottom-100 left-0 bg-gray-400 p-4">
-    <div class="userInfos">
-        <span>{{ username }}</span>
-        <span>{{ id }}</span>
-        <span>{{ email }}</span>
-        <span>{{ quote }}</span>
+    <div v-if="visible" class="userProfilePopup p-4 text-white">
+      <div class="userProfileInfos flex justify-between">
+        <div class="">
+          <p class="font-bold">{{ user.username }}</p>
+          <p>{{ user.email }}</p>
+        </div>
+        <div class="userPicture w-10 h-10 bg-gray-500 rounded-full overflow-hidden mr-4">
+          <img src="" alt="User profile" class="w-full h-full object-cover">
+        </div>
+      </div>
+      <p class="font-light text-gray-400 mt-5">"{{ user.bio }}"</p>
     </div>
-</div>
-</template>
-
-<script lang="ts" setup>
-    interface User {
-        id: string,
-        username: string,
-        email: string,
-        quote: string,
-    }
-    
-    const props = defineProps<User>()
-</script>
+  </template>
+  
+  <script lang="ts" setup>
+  const props = defineProps({
+    user: Object,
+    visible: Boolean
+  });
+  </script>
