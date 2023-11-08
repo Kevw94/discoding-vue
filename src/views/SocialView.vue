@@ -6,6 +6,7 @@
                 <IconPerson class="ml-6" />
                 <span class="friends border-r border-white mr-6 pr-6 pl-2">Friends</span>
                 <SocialTabs @update:tab="handleTabSelection" />
+                <button class="addFriendButton pl-3 pr-3 ml-6 bg-green-400 rounded cursor-pointer">Add</button>
             </div>
             <div class="socialActions w-[30%]"></div>
         </div>
@@ -23,17 +24,15 @@
                 <SearchBar placeholder="Rechercher..." @search-update="handleSearch" />
                 <span class="mt-5 mb-5">{{ currentTab }}</span>
                 <div class="friendsList w-full h-full overflow-y-scroll">
-                    <UserCardLarge />
-                    <UserCardLarge />
-                    <UserCardLarge />
-                    <UserCardLarge />
-                    <UserCardLarge />
-                    <UserCardLarge />
-                    <UserCardLarge />
-                    <UserCardLarge />
-                    <UserCardLarge />
-                    <UserCardLarge />
-                    <UserCardLarge />
+                    <UserCardLarge
+                        v-for="friend in filteredFriends"
+                        :key="friend.id"
+                        :username="friend.username"
+                        :quote="friend.quote"
+                        :friendId="friend.id"
+                        :hoverEffect="true"
+                        @delete-friend="handleDeleteFriend"
+                    />
                 </div>
             </div>
             <div class="socialActivities bg-gray-700 h-full w-[30%] border-l border-gray-600"></div>
@@ -46,12 +45,42 @@ import UserMenu from '@/components/utils/UserMenu.vue';
 import IconPerson from '@/components/icons/IconPerson.vue';
 import UserCard from '@/components/social/UserCard.vue';
 import UserCardLarge from '@/components/social/UserCardLarge.vue';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import SocialTabs from '@/components/social/SocialTabs.vue';
 import SearchBar from '@/components/utils/SearchBar.vue';
 
 const currentTab = ref('All');
-const tabCount = ref(0); // This will be dynamic based on the tab
+
+const allFriends = ref([
+  { id: 1, username: 'Kev', status: 'online', quote: 'guilhem fais une merge request stp' },
+  { id: 2, username: 'John Cena', status: 'offline', quote: 'hahahaha' },
+  { id: 3, username: 'Yujiro Hanma', status: 'offline', quote: "baki t'es dans la merde" },
+  { id: 4, username: 'Demi Lovato', status: 'online', quote: "oyyyyyyyyy" },
+  { id: 5, username: 'Swaggman', status: 'online', quote: "jsuis swaggman" },
+]);
+
+const filteredFriends = computed(() => {
+  switch (currentTab.value) {
+    case 'All':
+      return allFriends.value;
+    case 'Online':
+      return allFriends.value.filter(friend => friend.status === 'online');
+    case 'Pending':
+      return [];
+    case 'Blocked':
+      return [];
+    default:
+      return allFriends.value;
+  }
+});
+
+const handleDeleteFriend = (friendId: number) => {
+  const index = allFriends.value.findIndex(friend => friend.id === friendId);
+  if (index !== -1) {
+    allFriends.value.splice(index, 1);
+    console.log(allFriends)
+  }
+};
 
 function handleTabSelection(selectedTab: string) {
   currentTab.value = selectedTab;

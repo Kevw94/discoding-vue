@@ -22,7 +22,8 @@
 			placeholder="Password"
 			required
 		  />
-		  <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" style="margin-top: -8px;">
+		  <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" style="margin-top: -8px;"
+		  @click.prevent="navigateToPasswordReset">
 			Forgot your password?
 		  </a>
 		</div>
@@ -65,23 +66,27 @@
     password: '',
   });
 
-  const submitForm = async () => {
-  try {
-    const signinResponse = await signin(form.value.email, form.value.password);
-    console.log('Signin response:', signinResponse);
+  	const submitForm = async () => {
+  		try {
+			const signinResponse = await signin(form.value.email, form.value.password);
+			console.log('Signin response:', signinResponse);
 
-    const userInfoResponse = await userInfos(signinResponse.data.access_token);
-    console.log('User info response:', userInfoResponse.data);
+			const userInfoResponse = await userInfos(signinResponse.data.access_token);
+			console.log('User info response:', userInfoResponse.data.user.profile);
 
-    setUser(userInfoResponse.data.username, userInfoResponse.data.email, signinResponse.data.access_token);
+			setUser(userInfoResponse.data.user.profile.username, userInfoResponse.data.user.profile.email, signinResponse.data.access_token);
 
-    router.push('/social');
-  } catch (error) {
-    console.error('Login error:', error);
-  }
-};
+			router.push('/social');
+  		} catch (error) {
+			console.error('Login error:', error);
+  		}
+	};
 
-  const navigateToSignUp = () => {
-    router.push('/signup');
-  };
+  	const navigateToSignUp = () => {
+    	router.push('/signup');
+	};
+
+  	const navigateToPasswordReset = () => {
+		router.push('/ask-reset-password');
+	}
 </script>

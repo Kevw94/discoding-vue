@@ -17,7 +17,7 @@ export const signup = async (username: string, email: string, password: string) 
 
 export const activate = async (token: string) => {
 	return await http.post('auth/activate', {
-		token: token
+		"activationToken": token
 	})
 }
 
@@ -26,5 +26,18 @@ export const userInfos = async (token: string) => {
 	  	headers: {
 			'Authorization': `Bearer ${token}`
 	  	}
+	});
+}
+
+export const requestPasswordReset = async (email: string) => {
+	return await http.post('auth/ask-reset-password', {
+		"email": email
+	});
+}
+
+export const passwordReset = async (password: string, confirmPassword: string, token: string) => {
+	return await http.post(`auth/reset-password?token=${token}`, {
+		"password": password,
+		"confirmPassword": confirmPassword
 	});
 }

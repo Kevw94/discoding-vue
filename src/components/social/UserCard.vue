@@ -8,7 +8,7 @@
       </div>
       <div>
         <div class="userName text-white font-medium">{{ username }}</div>
-        <div class="userQuote text-gray-400 text-sm overflow-hidden whitespace-nowrap overflow-ellipsis">Hello world</div>
+        <div class="userQuote text-gray-400 text-sm overflow-hidden whitespace-nowrap overflow-ellipsis">{{ quote }}</div>
       </div>
     </div>
   </template>
@@ -20,6 +20,7 @@
       default: true,
     },
     username: String,
+    quote: String,
   });
 </script>
   
