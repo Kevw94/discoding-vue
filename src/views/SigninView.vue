@@ -66,16 +66,20 @@
   });
 
   const submitForm = async () => {
-    try {
-      const response = await signin(form.value.email, form.value.password);
-      const userInfoResponse = await userInfos(response.data.access_token);
-      setUser(userInfoResponse.data.email, response.data.access_token, userInfoResponse.data);
-      console.log('Login successful:', userInfoResponse.data);
-      router.push('/social');
-    } catch (error) {
-      console.error('Login error:', error);
-    }
-  };
+  try {
+    const signinResponse = await signin(form.value.email, form.value.password);
+    console.log('Signin response:', signinResponse);
+
+    const userInfoResponse = await userInfos(signinResponse.data.access_token);
+    console.log('User info response:', userInfoResponse.data);
+
+    setUser(userInfoResponse.data.username, userInfoResponse.data.email, signinResponse.data.access_token);
+
+    router.push('/social');
+  } catch (error) {
+    console.error('Login error:', error);
+  }
+};
 
   const navigateToSignUp = () => {
     router.push('/signup');

@@ -10,6 +10,8 @@ const state = reactive<UserState>({
 
 const setUser = (username: string, email: string, token: string) => {
     state.user = { username, email, token };
+    console.log("ici setuser")
+    console.log(username, email, token)
 };
   
   const clearUser = () => {
