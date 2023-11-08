@@ -16,7 +16,7 @@ import AddServerBtn from '@/components/server/AddServerBtn.vue'
 			</svg>
 		</div>
 		<div
-			class="grow-0 shrink-0 basis-0.5 w-1/2 bg-gradient-to-r from-gray-500 from-10% to-gray-900 to-90% rounded-full"
+			class="grow-0 shrink-0 basis-0.5 w-1/2 bg-gray-800 rounded-full"
 		></div>
 		<ServersList />
 		<AddServerBtn />
