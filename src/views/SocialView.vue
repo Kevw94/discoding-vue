@@ -16,7 +16,7 @@
                     <span class="mb-5">Private messages</span>
                     <UserCard />
                     <UserMenu />
-                    
+
                 </div>
             </div>
             <div class="socialCore flex-grow p-5 bg-gray-700 flex flex-col">
@@ -48,6 +48,9 @@ import UserCardLarge from '@/components/social/UserCardLarge.vue';
 import { computed, ref } from 'vue';
 import SocialTabs from '@/components/social/SocialTabs.vue';
 import SearchBar from '@/components/utils/SearchBar.vue';
+import { useSocket } from '../composables/useSocketNotifications';
+
+useSocket("aze")
 
 const currentTab = ref('All');
 
