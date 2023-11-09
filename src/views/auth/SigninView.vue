@@ -58,6 +58,7 @@
   import { signin, userInfos } from '@/api/auth-req';
   import useUserStore from '@/stores/user';
   import { useRouter } from 'vue-router';
+  import { useCookies } from 'vue3-cookies'
 
   const { setUser } = useUserStore();
   const router = useRouter();
@@ -65,6 +66,7 @@
     email: '',
     password: '',
   });
+  const {cookies} = useCookies()
 
   	const submitForm = async () => {
   		try {
@@ -72,10 +74,22 @@
 			console.log('Signin response:', signinResponse);
 
 			const userInfoResponse = await userInfos(signinResponse.data.access_token);
-			console.log('User info response:', userInfoResponse.data.user.profile);
+			console.log('User info response:', userInfoResponse.data.user);
 
-			setUser(userInfoResponse.data.user.profile.username, userInfoResponse.data.user.profile.email, signinResponse.data.access_token);
+			setUser(
+				userInfoResponse.data.user.id.toString(), 
+				userInfoResponse.data.user.profile.username,
+				userInfoResponse.data.user.profile.email, 
+				signinResponse.data.access_token, 
+				userInfoResponse.data.user.profile.bio, 
+				userInfoResponse.data.user.friends, 
+				userInfoResponse.data.user.sended_request,
+				userInfoResponse.data.user.received_requests,
+				userInfoResponse.data.user.blocked
+			);
+			console.log('ici received requests : ' + userInfoResponse.data.user.received_requests[0].userId )
 
+			cookies.set('token', signinResponse.data.access_token)
 			router.push('/social');
   		} catch (error) {
 			console.error('Login error:', error);

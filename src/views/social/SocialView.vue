@@ -1,22 +1,26 @@
 <template>
     <section class="socialContainer relative h-screen flex flex-grow flex-col text-white">
-      <AddFriend
-        v-if="showAddFriendPopup"
-        @close="showAddFriendPopup = false"
-        @friend-added="handleAddFriend"
-      />
+      <AddFriend v-if="showAddFriendPopup" @close="showAddFriendPopup = false" @add="handleAddFriend" />
         <div class="socialTopNav w-full h-10 bg-red flex bg-gray-600">
+            <div class="searchConvo w-[15%] h-full bg-gray-800"></div>
             <div class="socialTabs flex flex-grow items-center">
                 <IconPerson class="ml-6" />
                 <span class="friends border-r border-white mr-6 pr-6 pl-2">Friends</span>
                 <SocialTabs @update:tab="handleTabSelection" />
-                <button @click="showAddFriendPopup = true" class="addFriendButton pl-3 pr-3 ml-6 bg-green-400 rounded cursor-pointer">
-                  Add
-                </button>
+                <button class="addFriendButton pl-3 pr-3 ml-6 bg-green-400 rounded cursor-pointer"
+                @click.prevent="openAddFriendPopup">Add</button>
             </div>
             <div class="socialActions w-[30%]"></div>
         </div>
         <div class="socialPage w-full flex-grow flex">
+            <div class="privateMessages relative h-full bg-gray-800 w-[15%] p-5">
+                <div class="pmList w-full h-full">
+                    <span class="mb-5">Private messages</span>
+                    <UserCard />
+                    <UserMenu />
+                    
+                </div>
+            </div>
             <div class="socialCore flex-grow p-5 bg-gray-700 flex flex-col">
 
                 <SearchBar placeholder="Rechercher..." @search-update="handleSearch" />
@@ -39,34 +43,26 @@
 </template>
 
 <script setup lang="ts">
-import type { User } from '@/components/social/types/user.type';
+import UserMenu from '@/components/utils/UserMenu.vue';
 import IconPerson from '@/components/icons/IconPerson.vue';
+import UserCard from '@/components/social/UserCard.vue';
 import UserCardLarge from '@/components/social/UserCardLarge.vue';
-import useUserStore from '@/stores/user';
 import { computed, ref } from 'vue';
 import SocialTabs from '@/components/social/SocialTabs.vue';
 import SearchBar from '@/components/utils/SearchBar.vue';
-import AddFriend from '@/components/social/AddFriend.vue'
-import { displayUserInfos } from '@/api/friends-req';
-import { useCookies } from 'vue3-cookies';
+import AddFriend from '@/components/social/AddFriend.vue';
+
+const showAddFriendPopup = ref(false);
 
 const currentTab = ref('All');
-const userStore = useUserStore();
-const showAddFriendPopup = ref(false);
-const { cookies } = useCookies()
-const token = cookies.get('token')
 
-const allFriends = computed(() => {
-  return userStore.state.user?.friends ?? [];
-});
-
-const allReceivedFriendRequests = computed(() => {
-  return userStore.state.user?.received_requests ?? [];
-});
-
-const fetchUserInfos = (userId: string) => {
- return displayUserInfos(token, userId)
-}
+const allFriends = ref([
+  { id: 1, username: 'Kev', status: 'online', quote: 'guilhem fais une merge request stp' },
+  { id: 2, username: 'John Cena', status: 'offline', quote: 'hahahaha' },
+  { id: 3, username: 'Yujiro Hanma', status: 'offline', quote: "baki t'es dans la merde" },
+  { id: 4, username: 'Demi Lovato', status: 'online', quote: "oyyyyyyyyy" },
+  { id: 5, username: 'Swaggman', status: 'online', quote: "jsuis swaggman" },
+]);
 
 const filteredFriends = computed(() => {
   switch (currentTab.value) {
@@ -75,8 +71,7 @@ const filteredFriends = computed(() => {
     case 'Online':
       return allFriends.value.filter(friend => friend.status === 'online');
     case 'Pending':
-      console.log( 'received requests : ' + allReceivedFriendRequests.value)
-      return allReceivedFriendRequests.value;
+      return [];
     case 'Blocked':
       return [];
     default:
@@ -84,13 +79,29 @@ const filteredFriends = computed(() => {
   }
 });
 
-const handleAddFriend = async (newFriendId: string) => {
-  allFriends.value.push(newFriendId);
+const handleDeleteFriend = (friendId: number) => {
+  const index = allFriends.value.findIndex(friend => friend.id === friendId);
+  if (index !== -1) {
+    allFriends.value.splice(index, 1);
+    console.log(allFriends)
+  }
+};
+
+const openAddFriendPopup = () => {
+  showAddFriendPopup.value = true;
+};
+
+const handleAddFriend = (friendId: string) => {
+
+  allFriends.value.push({ id: Date.now(), username: friendId, status: 'pending', quote: '' });
+  showAddFriendPopup.value = false;
 };
 
 function handleTabSelection(selectedTab: string) {
   currentTab.value = selectedTab;
 }
 
-
+function handleSearch(query: string) {
+  // Handle the search logic
+}
 </script>

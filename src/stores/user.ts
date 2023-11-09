@@ -1,17 +1,16 @@
 import { reactive, readonly } from 'vue';
 
 interface UserState {
-    user: null | {username: string, email: string; token: string };
+    user: null | {id: string, username: string, email: string; token: string, bio: string, friends: [], blocked: [], sended_request: [], received_requests: [] };
 }
 
 const state = reactive<UserState>({
     user: null
 })
 
-const setUser = (username: string, email: string, token: string) => {
-    state.user = { username, email, token };
-    console.log("ici setuser")
-    console.log(username, email, token)
+const setUser = (id: string, username: string, email: string, token: string, bio: string, friends: [], blocked: [], sended_request: [], received_requests: []) => {
+    state.user = { id, username, email, token, bio, friends, blocked, sended_request, received_requests };
+    console.log(username, email, token, bio, friends, blocked, sended_request, received_requests)
 };
   
   const clearUser = () => {
@@ -20,7 +19,7 @@ const setUser = (username: string, email: string, token: string) => {
 
 export default function useUserStore() {
     return {
-        state: readonly(state),
+        state: state,
         setUser,
         clearUser,
     };
