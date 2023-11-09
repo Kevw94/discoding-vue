@@ -17,6 +17,7 @@
 </template>
 
 <script setup lang="ts">
+  import type { User } from './types/user.type'
   import UserCard from './UserCard.vue';
   import IconCall from '../icons/IconCall.vue';
   import IconTrash from '../icons/IconTrash.vue';
@@ -25,13 +26,17 @@
   const props = defineProps({
     hoverEffect: Boolean,
     username: String,
-    quote: String,
-    friendId: Number
+    bio: String,
+    friendId: {
+      type: String,
+      required: true
+    }
   });
+
 
   const emit = defineEmits(['delete-friend']);
 
-  const deleteFriend = (friendId: number) => {
+  const deleteFriend = (friendId: string) => {
     emit('delete-friend', friendId);
   }; 
 </script>

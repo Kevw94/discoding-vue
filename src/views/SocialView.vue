@@ -1,11 +1,18 @@
 <template>
-    <section class="socialContainer h-screen flex flex-grow flex-col text-white">
+    <section class="socialContainer relative h-screen flex flex-grow flex-col text-white">
+      <AddFriend
+        v-if="showAddFriendPopup"
+        @close="showAddFriendPopup = false"
+        @friend-added="handleAddFriend"
+      />
         <div class="socialTopNav w-full h-10 bg-red flex bg-gray-600">
             <div class="socialTabs flex flex-grow items-center">
                 <IconPerson class="ml-6" />
                 <span class="friends border-r border-white mr-6 pr-6 pl-2">Friends</span>
                 <SocialTabs @update:tab="handleTabSelection" />
-                <button class="addFriendButton pl-3 pr-3 ml-6 bg-green-400 rounded cursor-pointer">Add</button>
+                <button @click="showAddFriendPopup = true" class="addFriendButton pl-3 pr-3 ml-6 bg-green-400 rounded cursor-pointer">
+                  Add
+                </button>
             </div>
             <div class="socialActions w-[30%]"></div>
         </div>
@@ -32,23 +39,34 @@
 </template>
 
 <script setup lang="ts">
-import UserMenu from '@/components/utils/UserMenu.vue';
+import type { User } from '@/components/social/types/user.type';
 import IconPerson from '@/components/icons/IconPerson.vue';
-import UserCard from '@/components/social/UserCard.vue';
 import UserCardLarge from '@/components/social/UserCardLarge.vue';
+import useUserStore from '@/stores/user';
 import { computed, ref } from 'vue';
 import SocialTabs from '@/components/social/SocialTabs.vue';
 import SearchBar from '@/components/utils/SearchBar.vue';
+import AddFriend from '@/components/social/AddFriend.vue'
+import { displayUserInfos } from '@/api/friends-req';
+import { useCookies } from 'vue3-cookies';
 
 const currentTab = ref('All');
+const userStore = useUserStore();
+const showAddFriendPopup = ref(false);
+const { cookies } = useCookies()
+const token = cookies.get('token')
 
-const allFriends = ref([
-  { id: 1, username: 'Kev', status: 'online', quote: 'guilhem fais une merge request stp' },
-  { id: 2, username: 'John Cena', status: 'offline', quote: 'hahahaha' },
-  { id: 3, username: 'Yujiro Hanma', status: 'offline', quote: "baki t'es dans la merde" },
-  { id: 4, username: 'Demi Lovato', status: 'online', quote: "oyyyyyyyyy" },
-  { id: 5, username: 'Swaggman', status: 'online', quote: "jsuis swaggman" },
-]);
+const allFriends = computed(() => {
+  return userStore.state.user?.friends ?? [];
+});
+
+const allReceivedFriendRequests = computed(() => {
+  return userStore.state.user?.received_requests ?? [];
+});
+
+const fetchUserInfos = (userId: string) => {
+ return displayUserInfos(token, userId)
+}
 
 const filteredFriends = computed(() => {
   switch (currentTab.value) {
@@ -57,7 +75,8 @@ const filteredFriends = computed(() => {
     case 'Online':
       return allFriends.value.filter(friend => friend.status === 'online');
     case 'Pending':
-      return [];
+      console.log( 'received requests : ' + allReceivedFriendRequests.value)
+      return allReceivedFriendRequests.value;
     case 'Blocked':
       return [];
     default:
@@ -65,19 +84,13 @@ const filteredFriends = computed(() => {
   }
 });
 
-const handleDeleteFriend = (friendId: number) => {
-  const index = allFriends.value.findIndex(friend => friend.id === friendId);
-  if (index !== -1) {
-    allFriends.value.splice(index, 1);
-    console.log(allFriends)
-  }
+const handleAddFriend = async (newFriendId: string) => {
+  allFriends.value.push(newFriendId);
 };
 
 function handleTabSelection(selectedTab: string) {
   currentTab.value = selectedTab;
 }
 
-function handleSearch(query: string) {
-  // Handle the search logic
-}
+
 </script>
