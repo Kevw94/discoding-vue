@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-const IMG: string =
-	'https://images.unsplash.com/photo-1697891601220-6a6bfde21139?q=80&w=2960&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-
 const imageData = ref()
 const fileInput = ref(null)
 console.log(fileInput)
@@ -37,7 +34,7 @@ const isHidden: Ref<UnwrapRef<boolean>> = ref(true)
 		</div>
 	</div>
 	<div v-if="!isHidden">
-		<div class="bg-gray-800 bg-opacity-70 fixed inset-0 z-[60]" v-on:click="isHidden = true" />
+		<div class="backdrop-blur-sm bg-gray-800 bg-opacity-70 fixed inset-0 z-[60]" v-on:click="isHidden = true" />
 		<div
 			tabindex="-1"
 			class="fixed w-80 h-96 bg-gray-700 inset-0 m-auto z-[60] p-2 rounded-xl"
