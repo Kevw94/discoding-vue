@@ -3,7 +3,7 @@ const channels: string[] = ['combot', 'blabla', 'suggestion']
 </script>
 
 <template>
-	<div class="p-1 overflow-y-scroll flex flex-col">
+	<div class="p-1 overflow-y-scroll grow flex flex-col">
 		<ul>
 			<li class="my-1.5" v-for="channel in channels">
 				<a href="" class="p-1 flex rounded-md w-full">
