@@ -1,26 +1,63 @@
 import { reactive, readonly } from 'vue';
+import { useCookies } from 'vue3-cookies';
+
+const { cookies } = useCookies();
+
+interface User {
+  id: string;
+  username: string;
+  email: string;
+  bio: string;
+  friends: any[];
+  blocked: any[];
+  sended_request: any[];
+  received_requests: any[];
+}
 
 interface UserState {
-    user: null | {id: string, username: string, email: string; token: string, bio: string, friends: [], blocked: [], sended_request: [], received_requests: [] };
+  user: User | null;
 }
 
 const state = reactive<UserState>({
-    user: null
-})
+  user: null,
+});
 
-const setUser = (id: string, username: string, email: string, token: string, bio: string, friends: [], blocked: [], sended_request: [], received_requests: []) => {
-    state.user = { id, username, email, token, bio, friends, blocked, sended_request, received_requests };
-    console.log(username, email, token, bio, friends, blocked, sended_request, received_requests)
+const setUser = (user: User) => {
+  state.user = user;
+
+  localStorage.setItem('user', JSON.stringify({
+    id: user.id,
+    username: user.username,
+    email: user.email,
+    bio: user.bio,
+    friends: user.friends,
+    blocked: user.blocked,
+    sended_request: user.sended_request,
+    received_requests: user.received_requests,
+  }));
+
+  cookies.set('token', user.token, { path: '/' });
+
 };
-  
-  const clearUser = () => {
-    state.user = null;
+
+const loadUser = () => {
+  const userString = localStorage.getItem('user');
+  if (userString) {
+    state.user = JSON.parse(userString);
+  }
+};
+
+const clearUser = () => {
+  state.user = null;
+  localStorage.removeItem('user');
+  cookies.remove('token');
 };
 
 export default function useUserStore() {
-    return {
-        state: state,
-        setUser,
-        clearUser,
-    };
+  return {
+    state: readonly(state),
+    setUser,
+    clearUser,
+    loadUser,
+  };
 }

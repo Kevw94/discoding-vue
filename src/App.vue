@@ -1,14 +1,19 @@
 <script setup lang="ts">
+import { onMounted } from 'vue';
 import SideLayoutView from './views/SideLayoutView.vue';
-import { RouterView } from 'vue-router'
+import { RouterView } from 'vue-router';
+import useUserStore from '@/stores/user';
 
-import useUserStore from '@/stores/user'
-const { state } = useUserStore();
+const userStore = useUserStore();
+
+onMounted(() => {
+  userStore.loadUser();
+});
 </script>
 
 <template>
-	<section class="app-layout flex flew-row w-screen">
-		<SideLayoutView v-if="state.user" />
-		<RouterView />
-	</section>
+  <section class="app-layout flex flew-row w-screen">
+    <SideLayoutView v-if="userStore.state.user" />
+    <RouterView />
+  </section>
 </template>

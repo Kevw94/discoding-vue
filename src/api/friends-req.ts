@@ -11,13 +11,10 @@ export const addFriends = async (token: string, friendId: string) => {
     });
 };
 
-export const displayUserInfos = async (token: string, friendId: string) => {
-    return await http.post(`/users/${friendId}`,  {
-        friendId: friendId,
-    },
-    {
+export const getUserInfos = async (token: string, userId: string) => {
+    return await http.get(`/users/${userId}`, {
         headers: {
             'Authorization': `Bearer ${token}`
         }
-    })
+    });
 }
