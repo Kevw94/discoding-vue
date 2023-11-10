@@ -6,4 +6,6 @@ export interface User {
     bio: string;
     friends: Array<any>;
     blocked: Array<any>;
+    sended_request: Array<any>;
+    received_requests: Array<any>;
   }

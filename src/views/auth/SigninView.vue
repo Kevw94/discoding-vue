@@ -54,6 +54,7 @@
   </template>
   
   <script setup lang="ts">
+  import type { User } from '@/components/social/types/user.type';
   import { ref } from 'vue';
   import { signin, userInfos } from '@/api/auth-req';
   import useUserStore from '@/stores/user';
@@ -68,33 +69,30 @@
   });
   const {cookies} = useCookies()
 
-  	const submitForm = async () => {
-  		try {
-			const signinResponse = await signin(form.value.email, form.value.password);
-			console.log('Signin response:', signinResponse);
+  const submitForm = async () => {
+    try {
+        const signinResponse = await signin(form.value.email, form.value.password);
+        const userInfoResponse = await userInfos(signinResponse.data.access_token);
+        
+        // Construire l'objet utilisateur
+        const user: User = {
+            id: userInfoResponse.data.user.id.toString(),
+            username: userInfoResponse.data.user.profile.username,
+            email: userInfoResponse.data.user.profile.email,
+            token: signinResponse.data.access_token,
+            bio: userInfoResponse.data.user.profile.bio,
+            friends: userInfoResponse.data.user.friends,
+            sended_request: userInfoResponse.data.user.sended_request,
+            received_requests: userInfoResponse.data.user.received_requests,
+            blocked: userInfoResponse.data.user.blocked
+        };
 
-			const userInfoResponse = await userInfos(signinResponse.data.access_token);
-			console.log('User info response:', userInfoResponse.data.user);
-
-			setUser(
-				userInfoResponse.data.user.id.toString(), 
-				userInfoResponse.data.user.profile.username,
-				userInfoResponse.data.user.profile.email, 
-				signinResponse.data.access_token, 
-				userInfoResponse.data.user.profile.bio, 
-				userInfoResponse.data.user.friends, 
-				userInfoResponse.data.user.sended_request,
-				userInfoResponse.data.user.received_requests,
-				userInfoResponse.data.user.blocked
-			);
-			console.log('ici received requests : ' + userInfoResponse.data.user.received_requests[0].userId )
-
-			cookies.set('token', signinResponse.data.access_token)
-			router.push('/social');
-  		} catch (error) {
-			console.error('Login error:', error);
-  		}
-	};
+      	setUser(user);
+    	router.push('/social');
+    } catch (error) {
+        console.error('Login error:', error);
+    }
+};
 
   	const navigateToSignUp = () => {
     	router.push('/signup');

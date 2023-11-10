@@ -11,12 +11,17 @@
       </div>
       <p class="font-light text-gray-400 mt-5">"{{ user!.bio }}"</p>
       <p>{{ user!.id }}</p>
+      <button @click="logout" class="logoutButton mt-5 py-2 px-4 bg-red-600 hover:bg-red-700 text-white font-bold rounded">
+      Logout
+    </button>
     </div>
   </template>
   
   <script lang="ts" setup>
   import { type PropType } from 'vue';
   import type { User } from './types/user.type'
+  import { useRouter } from 'vue-router';
+  import useUserStore from '@/stores/user';
 
 const props = defineProps({
   user: {
@@ -25,4 +30,12 @@ const props = defineProps({
   },
   visible: Boolean
 });
+
+const router = useRouter();
+const { clearUser } = useUserStore();
+
+const logout = () => {
+  clearUser();
+  router.push('/');
+};
   </script>
