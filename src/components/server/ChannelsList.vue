@@ -1,24 +1,23 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { getServerChannels } from '@/api/channels'
-import { useRoute } from "vue-router";
-import { useCookies } from "vue3-cookies";
+import { useRoute } from 'vue-router'
+import { useCookies } from 'vue3-cookies'
 
 const channels = ref([])
 const { cookies } = useCookies()
 console.log(cookies)
 const token = cookies.get('token')
 const route = useRoute()
-console.log(route.params.server);
+console.log(route.params.server)
 console.log(token)
 
 const getData = async () => {
-  const { data = {} } = await getServerChannels(token,route.params.server as string )
-  channels.value = data.newChannel
+	const { data = {} } = await getServerChannels(token, route.params.server as string)
+	channels.value = data.newChannel
 }
 getData()
 
-console.log("'/server/'+ route.params.server + '/' + channel._id");
 </script>
 
 <template>

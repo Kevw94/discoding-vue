@@ -8,3 +8,13 @@ export const getServerChannels = async (token: string, serverId:string) => {
       }
     });
 };
+
+export const getAllChannels = async (token: string) => {
+  return await http.get(`/channels`,
+    {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+};
+
