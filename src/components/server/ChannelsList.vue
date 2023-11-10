@@ -1,5 +1,24 @@
 <script setup lang="ts">
-const channels: string[] = ['combot', 'blabla', 'suggestion']
+import { ref } from 'vue'
+import { getServerChannels } from '@/api/channels'
+import { useRoute } from "vue-router";
+import { useCookies } from "vue3-cookies";
+
+const channels = ref([])
+const { cookies } = useCookies()
+console.log(cookies)
+const token = cookies.get('token')
+const route = useRoute()
+console.log(route.params.server);
+console.log(token)
+
+const getData = async () => {
+  const { data = {} } = await getServerChannels(token,route.params.server as string )
+  channels.value = data.newChannel
+}
+getData()
+
+console.log("'/server/'+ route.params.server + '/' + channel._id");
 </script>
 
 <template>
@@ -21,7 +40,7 @@ const channels: string[] = ['combot', 'blabla', 'suggestion']
 						</svg>
 					</div>
 					<div class="m-0.5">
-						{{ channel }}
+						{{ channel.name }}
 					</div>
 				</a>
 			</li>
