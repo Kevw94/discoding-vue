@@ -17,7 +17,6 @@ const getData = async () => {
 	channels.value = data.newChannel
 }
 getData()
-
 </script>
 
 <template>

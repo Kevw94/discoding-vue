@@ -1,13 +1,12 @@
 import './assets/main.css'
 import '@/styles/index.css'
 
-
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
 import App from './App.vue'
 import router from './router'
-import VueCookies  from 'vue3-cookies'
+import VueCookies from 'vue3-cookies'
 
 const app = createApp(App)
 

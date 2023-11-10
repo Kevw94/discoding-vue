@@ -6,7 +6,7 @@ import useUserStore from '@/stores/user'
 import { useCookies } from 'vue3-cookies'
 import { getMeInfos } from './api/auth-req'
 import type { User } from './components/social/types/user.type'
-import SideBar from "@/components/server/SideBar.vue";
+import SideBar from '@/components/server/SideBar.vue'
 
 const { cookies } = useCookies()
 
