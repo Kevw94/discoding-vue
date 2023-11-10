@@ -1,4 +1,7 @@
+import { useCookies } from 'vue3-cookies';
 import { http } from './network/api'
+
+const { cookies } = useCookies()
 
 export const signin = async (email: string, password: string) => {
     return await http.post('/auth/signin', {
@@ -39,5 +42,14 @@ export const passwordReset = async (password: string, confirmPassword: string, t
 	return await http.post(`auth/reset-password?token=${token}`, {
 		"password": password,
 		"confirmPassword": confirmPassword
+	});
+}
+
+
+export const getMeInfos = async () => {
+	return await http.get('auth/me', {
+	  	headers: {
+			'Authorization': `Bearer ${cookies.get('token')}`
+	  	}
 	});
 }
