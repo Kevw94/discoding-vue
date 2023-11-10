@@ -39,7 +39,7 @@ onMounted(async () => {
 
 <template>
 	<section class="app-layout flex flew-row w-screen">
-		<SideBar v-if="userStore.state.user" />
+		<SideLayoutView v-if="userStore.state.user" />
 		<RouterView />
 	</section>
 </template>
