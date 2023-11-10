@@ -4,6 +4,18 @@ import type { User } from '@/components/social/types/user.type'
 
 const { cookies } = useCookies();
 
+interface User {
+  id: string;
+  username: string;
+  email: string;
+  profile_picture?: string
+  bio: string;
+  friends: any[];
+  blocked: any[];
+  sended_request: any[];
+  received_requests: any[];
+}
+
 interface UserState {
   user: User | null;
 }

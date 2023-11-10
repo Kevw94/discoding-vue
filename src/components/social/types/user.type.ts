@@ -3,7 +3,7 @@ export interface User {
   username: string;
   email: string;
   bio: string;
-  token: string,
+  token?: string,
   friends: Array<String>;
   blocked: Array<String>;
   sended_request: Array<Object>;
