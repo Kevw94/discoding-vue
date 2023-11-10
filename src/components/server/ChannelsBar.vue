@@ -4,7 +4,7 @@ import ChannelsList from '@/components/server/ChannelsList.vue'
 
 <template>
 	<div class="bg-gray-800 relative flex flex-col grow-0 shrink-0 basis-64">
-		<div class="p-3.5 shadow-md grow-0 shrink-0 basis-6">
+		<div class="pb-3.5 shadow-md grow-0 shrink-0 basis-6">
 			<h3>Serveur Name</h3>
 		</div>
 		<ChannelsList />

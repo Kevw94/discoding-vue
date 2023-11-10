@@ -21,6 +21,6 @@ import { computed } from 'vue';
 import ChannelsBar from '@/components/server/ChannelsBar.vue';
 
 const isServerView = computed(() => {
-  return route.path === '/server/:server/' || route.name === 'ServerView';
+  return route.path.startsWith('/server/')
 });
 </script>
