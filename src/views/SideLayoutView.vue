@@ -1,10 +1,11 @@
 <template>
     <SideBar />
-    <div class="side-layout relative h-full bg-gray-800 w-[15%] p-5">
+<!--    <div class="side-layout relative h-full bg-gray-800 w-[15%] p-5">
         <div class="content w-full h-full">
+
         </div>
-        <UserMenu />
-    </div>
+
+    </div>-->
 </template>
 
 <script lang="ts" setup>

@@ -3,7 +3,7 @@ import { ref } from 'vue'
 
 const imageData = ref()
 const fileInput = ref(null)
-console.log(fileInput)
+// console.log(fileInput)
 const emit = defineEmits(['input', 'close'])
 const chooseImage = () => {
 	fileInput._value.click()
