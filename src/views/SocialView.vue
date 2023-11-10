@@ -13,7 +13,11 @@
         <button @click="showAddFriendPopup = true" class="addFriendButton pl-3 pr-3 ml-6 bg-green-400 rounded cursor-pointer">
           Add
         </button>
+		<div class="ml-6">
+	  	<RouterLink to="params"><Edit></Edit></RouterLink>
+		</div>
       </div>
+
       <div class="socialActions w-[30%]"></div>
     </div>
     <div class="socialPage w-full flex-grow flex">
@@ -41,6 +45,7 @@ import SearchBar from '@/components/utils/SearchBar.vue';
 import { useCookies } from 'vue3-cookies';
 import { getUserInfos } from '@/api/friends-req';
 import type { Friend } from '@/components/social/types/friend.type';
+import Edit from '@/components/icons/Edit.vue';
 
 // state
 const userStore = useUserStore();
@@ -104,7 +109,7 @@ const handleAddFriend = async (newFriendId: string) => {
 };
 
 const handleAcceptFriend = () => {
-  
+
 }
 
 const handleDeclineFriend = () => {
