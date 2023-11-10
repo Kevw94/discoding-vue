@@ -11,6 +11,28 @@ export const addFriends = async (token: string, friendId: string) => {
     });
 };
 
+export const acceptFriend = async (token: string, friendId: string) => {
+    return await http.post('users/acceptFriend', {
+        userId: friendId,
+    },
+    {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
+}
+
+export const declineFriend = async (token: string, friendId: string) => {
+    return await http.post('users/declineFriend', {
+        userId: friendId,
+    },
+    {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
+}
+
 export const getUserInfos = async (token: string, userId: string) => {
     return await http.get(`/users/${userId}`, {
         headers: {

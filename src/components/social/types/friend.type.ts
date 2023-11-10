@@ -3,5 +3,12 @@ export interface Friend {
     username: string;
     email: string;
     bio: string;
-    friends: Array<any>;
+}
+
+export interface FriendList {
+    friendList: Array<Friend>;
+}
+
+export interface FriendIdsList {
+    friendIdsList: Array<String>; 
 }
