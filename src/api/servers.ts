@@ -1,10 +1,9 @@
-import { http } from "./network/api"
+import { http } from './network/api'
 
 export const getUserServers = async (token: string) => {
-  return await http.get('/servers',
-    {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    });
-};
+	return await http.get('/servers', {
+		headers: {
+			Authorization: `Bearer ${token}`
+		}
+	})
+}

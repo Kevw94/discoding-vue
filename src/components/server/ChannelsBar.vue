@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import ChannelsList from '@/components/server/ChannelsList.vue'
 import UserCard from '@/components/server/UserCard.vue'
-import UserMenu from "@/components/utils/UserMenu.vue";
+import UserMenu from '@/components/utils/UserMenu.vue'
 </script>
 
 <template>
@@ -10,7 +10,7 @@ import UserMenu from "@/components/utils/UserMenu.vue";
 			<h3>Serveur Name</h3>
 		</div>
 		<ChannelsList />
-    <UserMenu />
+		<UserMenu />
 	</div>
 </template>
 

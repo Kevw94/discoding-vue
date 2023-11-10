@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ServersList from '@/components/server/ServersList.vue'
-import NewServerModal from "@/components/server/NewServerModal.vue";
+import NewServerModal from '@/components/server/NewServerModal.vue'
 </script>
 
 <template>
@@ -15,11 +15,9 @@ import NewServerModal from "@/components/server/NewServerModal.vue";
 				/>
 			</svg>
 		</a>
-		<div
-			class="grow-0 shrink-0 basis-0.5 w-1/2 bg-gray-800 rounded-full"
-		></div>
+		<div class="grow-0 shrink-0 basis-0.5 w-1/2 bg-gray-800 rounded-full"></div>
 		<ServersList />
-    <NewServerModal/>
+		<NewServerModal />
 	</div>
 </template>
 

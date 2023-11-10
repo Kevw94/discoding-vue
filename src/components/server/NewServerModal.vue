@@ -34,13 +34,13 @@ const isHidden: Ref<UnwrapRef<boolean>> = ref(true)
 		</div>
 	</div>
 	<div v-if="!isHidden">
-		<div class="backdrop-blur-sm bg-gray-800 bg-opacity-70 fixed inset-0 z-[60]" v-on:click="isHidden = true" />
 		<div
-			tabindex="-1"
-			class="fixed w-80 h-96 bg-gray-700 inset-0 m-auto z-[60] p-2 rounded-xl"
-		>
+			class="backdrop-blur-sm bg-gray-800 bg-opacity-70 fixed inset-0 z-[60]"
+			v-on:click="isHidden = true"
+		/>
+		<div tabindex="-1" class="fixed w-80 h-96 bg-gray-700 inset-0 m-auto z-[60] p-2 rounded-xl">
 			<div class="flex h-full w-full justify-between items-center flex-col p-2">
-			<h1 class="p-2 text-xl text-center">Create a new server!</h1>
+				<h1 class="p-2 text-xl text-center">Create a new server!</h1>
 				<input class="rounded-md p-2 text-gray-950" type="text" placeholder="Server Name" />
 				<!--				<input @change="chooseImage" ref="fileInput" type="file" id="file" class="opacity-0" />-->
 				<div
@@ -74,7 +74,12 @@ const isHidden: Ref<UnwrapRef<boolean>> = ref(true)
             />
           </div>-->
 				</div>
-			<button class=" self-end bg-gradient-to-r from-teal-900 to-teal-800 hover:bg-gradient-to-r hover:from-teal-800 hover:to-teal-700 py-2 rounded-md px-4" v-on:click="isHidden = true">Create</button>
+				<button
+					class="self-end bg-gradient-to-r from-teal-900 to-teal-800 hover:bg-gradient-to-r hover:from-teal-800 hover:to-teal-700 py-2 rounded-md px-4"
+					v-on:click="isHidden = true"
+				>
+					Create
+				</button>
 			</div>
 		</div>
 	</div>

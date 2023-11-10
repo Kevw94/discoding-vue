@@ -43,9 +43,8 @@ const routes: Array<RouteRecordRaw> = [
 	},
 	{
 		path: '/:catchAll(.*)*',
-		component: () => import('@/views/ErrorNotFoundView.vue'),
-	},
-
+		component: () => import('@/views/ErrorNotFoundView.vue')
+	}
 ]
 
 const router = createRouter({
