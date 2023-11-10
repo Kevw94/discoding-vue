@@ -4,7 +4,7 @@
 		:user="userState.user"
 		:visible="isPopupVisible"
 	/>
-	<div class="z-1 userMenu flex absolute bottom-0 left-0" @click="togglePopup">
+	<div class="z-1 userMenu flex fixed bottom-0" @click="togglePopup">
 		<div class="userInfos">
 			<UserCard
 				:username="userState.user?.username"
