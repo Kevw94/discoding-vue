@@ -26,7 +26,7 @@ const setUser = (user: User) => {
     received_requests: user.received_requests,
   }));
 
-  cookies.set('token', user.token, { path: '/' });
+  cookies.set('token', user.token);
 
 };
 

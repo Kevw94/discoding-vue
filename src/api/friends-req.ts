@@ -33,6 +33,17 @@ export const declineFriend = async (token: string, friendId: string) => {
     });
 }
 
+export const deleteFriend = async (token: string, friendId: string) => {
+    return await http.post('users/deleteFriend', {
+        userId: friendId,
+    },
+    {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
+}
+
 export const getUserInfos = async (token: string, userId: string) => {
     return await http.get(`/users/${userId}`, {
         headers: {

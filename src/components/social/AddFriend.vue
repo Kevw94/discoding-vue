@@ -1,43 +1,34 @@
 <template>
-  <div class="addFriendPopup text-black absolute z-50 top-0 left-0 h-screen w-screen inset-0 bg-black bg-opacity-70 flex justify-center items-center">
-    <div class="bg-white p-4 rounded">
-      <div class="close text-black" @click="closePopup">X</div>
-      <h3>Add a Friend</h3>
-      <input type="text" v-model="friendId" placeholder="Enter user ID">
-      <button @click="submitAddFriend">Search and Add</button>
+  <div v-if="show" class="addFriendPopup fixed top-0 left-0 w-full h-full flex justify-center items-center bg-black bg-opacity-50">
+    <div class="popup-inner bg-white p-4 rounded-lg">
+      <h2 class="text-xl mb-4">Ajouter un ami</h2>
+      <input type="text" placeholder="Enter user ID'" class="border p-2 rounded w-full mb-4" />
+      <button class="bg-blue-500 text-white p-2 rounded" @click="addFriend">Ajouter</button>
+      <button class="bg-red-500 text-white p-2 rounded ml-2" @click="closePopup">Fermer</button>
     </div>
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref } from 'vue';
-import { addFriends } from '@/api/friends-req';
-import { useCookies } from 'vue3-cookies'
+<script lang="ts" setup>
+import { ref, defineProps, defineEmits } from 'vue';
 
-const emit = defineEmits(['close', 'friend-added']);
-const friendId = ref('');
-const { cookies } = useCookies();
-const token = cookies.get('token')
+const props = defineProps({
+  show: Boolean
+});
 
-
-const submitAddFriend = async () => {
-  try {
-    const response = await addFriends(token, friendId.value);
-    console.log('réponse addfriend : ' + response);
-    
-    if (response.status === 201) {
-      emit('friend-added', friendId.value);
-      friendId.value = '';
-      closePopup();
-    } else {
-      console.log('failure')
-    }
-  } catch (error) {
-    console.error(error);
-  }
-};
+const emit = defineEmits(['add', 'close']);
 
 const closePopup = () => {
   emit('close');
 };
 </script>
+
+<style scoped>
+.addFriendPopup {
+  position: fixed;
+  z-index: 10; /* Assurez-vous que le z-index est suffisamment élevé pour se superposer aux autres éléments */
+}
+.popup-inner {
+  /* Styles pour le contenu intérieur du popup */
+}
+</style>

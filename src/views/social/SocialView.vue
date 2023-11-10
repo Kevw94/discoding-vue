@@ -1,89 +1,96 @@
 <template>
-    <section class="socialContainer relative h-screen flex flex-grow flex-col text-white">
-      <AddFriend v-if="showAddFriendPopup" @close="showAddFriendPopup = false" @add="handleAddFriend" />
-        <div class="socialTopNav w-full h-10 bg-red flex bg-gray-600">
-            <div class="searchConvo w-[15%] h-full bg-gray-800"></div>
-            <div class="socialTabs flex flex-grow items-center">
-                <IconPerson class="ml-6" />
-                <span class="friends border-r border-white mr-6 pr-6 pl-2">Friends</span>
-                <SocialTabs @update:tab="handleTabSelection" />
-                <button class="addFriendButton pl-3 pr-3 ml-6 bg-green-400 rounded cursor-pointer"
-                @click.prevent="openAddFriendPopup">Add</button>
-            </div>
-            <div class="socialActions w-[30%]"></div>
+  <section class="socialContainer relative h-screen flex flex-grow flex-col text-white">
+    <AddFriend v-if="showAddFriendPopup" @close="closeAddFriendPopup" @add="handleAddFriend" />
+    <div class="socialTopNav w-full h-10 bg-red flex bg-gray-600">
+      <div class="socialTabs flex flex-grow items-center">
+        <IconPerson class="ml-6" />
+        <span class="friends border-r border-white mr-6 pr-6 pl-2">Friends</span>
+        <SocialTabs @update:tab="handleTabSelection" />
+        <button @click="openAddFriendPopup" class="addFriendButton pl-3 pr-3 ml-6 bg-green-400 rounded cursor-pointer">
+          Add
+        </button>
+      </div>
+      <div class="socialActions w-[30%]"></div>
+    </div>
+    <div class="socialPage w-full flex-grow flex">
+      <div class="socialCore flex-grow p-5 bg-gray-700 flex flex-col">
+        <SearchBar placeholder="Rechercher..." @search-update="" />
+        <span class="mt-5 mb-5">{{ currentTab }}</span>
+        <div class="friendsList w-full h-full overflow-y-scroll">
+          <FriendCard v-if="currentTab === 'All'" v-for="friend in friendProfiles" :friend="friend" @delete-friend="handleDeleteFriend"/>
+          <PendingRequest v-if="currentTab === 'Pending'" v-for="friend in pendingProfiles" :friend="friend" @decline-friend="handleDeclineFriend" @accept-friend="handleAcceptFriend"/>
         </div>
-        <div class="socialPage w-full flex-grow flex">
-            <div class="privateMessages relative h-full bg-gray-800 w-[15%] p-5">
-                <div class="pmList w-full h-full">
-                    <span class="mb-5">Private messages</span>
-                    <UserCard />
-                    <UserMenu />
-                    
-                </div>
-            </div>
-            <div class="socialCore flex-grow p-5 bg-gray-700 flex flex-col">
-
-                <SearchBar placeholder="Rechercher..." @search-update="handleSearch" />
-                <span class="mt-5 mb-5">{{ currentTab }}</span>
-                <div class="friendsList w-full h-full overflow-y-scroll">
-                    <UserCardLarge
-                        v-for="friend in filteredFriends"
-                        :key="friend.id"
-                        :username="friend.username"
-                        :quote="friend.quote"
-                        :friendId="friend.id"
-                        :hoverEffect="true"
-                        @delete-friend="handleDeleteFriend"
-                    />
-                </div>
-            </div>
-            <div class="socialActivities bg-gray-700 h-full w-[30%] border-l border-gray-600"></div>
-        </div>
-    </section>
+      </div>
+      <div class="socialActivities bg-gray-700 h-full w-[30%] border-l border-gray-600"></div>
+    </div>
+  </section>
 </template>
 
 <script setup lang="ts">
-import UserMenu from '@/components/utils/UserMenu.vue';
-import IconPerson from '@/components/icons/IconPerson.vue';
-import UserCard from '@/components/social/UserCard.vue';
-import UserCardLarge from '@/components/social/UserCardLarge.vue';
-import { computed, ref } from 'vue';
+import { ref, computed, onMounted } from 'vue';
+import useUserStore from '@/stores/user';
 import SocialTabs from '@/components/social/SocialTabs.vue';
-import SearchBar from '@/components/utils/SearchBar.vue';
+import FriendCard from './FriendCard.vue';
+import PendingRequest from './PendingRequest.vue';
 import AddFriend from '@/components/social/AddFriend.vue';
+import SearchBar from '@/components/utils/SearchBar.vue';
+import { useCookies } from 'vue3-cookies';
+import { getUserInfos, deleteFriend, addFriends } from '@/api/friends-req';
+import type { Friend } from '@/components/social/types/friend.type';
 
-const showAddFriendPopup = ref(false);
-
+// state
+const userStore = useUserStore();
 const currentTab = ref('All');
+const showAddFriendPopup = ref(false);
+const friendProfiles = ref<Friend[]>([]);
+const pendingProfiles = ref<Friend[]>([]);
 
-const allFriends = ref([
-  { id: 1, username: 'Kev', status: 'online', quote: 'guilhem fais une merge request stp' },
-  { id: 2, username: 'John Cena', status: 'offline', quote: 'hahahaha' },
-  { id: 3, username: 'Yujiro Hanma', status: 'offline', quote: "baki t'es dans la merde" },
-  { id: 4, username: 'Demi Lovato', status: 'online', quote: "oyyyyyyyyy" },
-  { id: 5, username: 'Swaggman', status: 'online', quote: "jsuis swaggman" },
-]);
+// cookies
+const { cookies } = useCookies();
+const token = cookies.get('token');
 
-const filteredFriends = computed(() => {
-  switch (currentTab.value) {
-    case 'All':
-      return allFriends.value;
-    case 'Online':
-      return allFriends.value.filter(friend => friend.status === 'online');
-    case 'Pending':
-      return [];
-    case 'Blocked':
-      return [];
-    default:
-      return allFriends.value;
+// computed properties
+const allFriends = computed(() => userStore.state.user?.friends ?? []);
+const allPendingRequestsId = computed(() => userStore.state.user?.received_requests ?? [])
+
+// functions
+const fetchAllFriendsInfos = async () => {
+  try {
+    const friendsInfosResponses = await Promise.all(
+      allFriends.value.map(friendId => getUserInfos(token, friendId))
+    );
+
+    friendProfiles.value = friendsInfosResponses.map(response => {
+      const friendData = response.data.user;
+      return {
+        id: friendData._id,
+        username: friendData.profile.username,
+        email: friendData.profile.email,
+        bio: friendData.profile.bio,
+      };
+    });
+  } catch (error) {
+    console.error('Erreur lors de la récupération des informations des amis :', error);
   }
-});
+};
 
-const handleDeleteFriend = (friendId: number) => {
-  const index = allFriends.value.findIndex(friend => friend.id === friendId);
-  if (index !== -1) {
-    allFriends.value.splice(index, 1);
-    console.log(allFriends)
+const fetchAllPendingRequests = async () => {
+  try {
+    const pendingRequestsResponses = await Promise.all(
+      allPendingRequestsId.value.map(pendingReq => getUserInfos(token, pendingReq.userId))
+    );
+
+    pendingProfiles.value = pendingRequestsResponses.map(response => {
+      const userData = response.data.user;
+      return {
+        id: userData._id,
+        username: userData.profile.username,
+        email: userData.profile.email,
+        bio: userData.profile.bio,
+      };
+    });
+  } catch (error) {
+    console.error('Erreur lors de la récupération des informations des demandes en attente :', error);
   }
 };
 
@@ -91,17 +98,50 @@ const openAddFriendPopup = () => {
   showAddFriendPopup.value = true;
 };
 
-const handleAddFriend = (friendId: string) => {
-
-  allFriends.value.push({ id: Date.now(), username: friendId, status: 'pending', quote: '' });
+const closeAddFriendPopup = () => {
   showAddFriendPopup.value = false;
 };
 
-function handleTabSelection(selectedTab: string) {
-  currentTab.value = selectedTab;
+const handleAddFriend = async (newFriendId: string) => {
+  addFriends(token, newFriendId);
+  closeAddFriendPopup();
+};
+
+const handleDeleteFriend = (friendId: string) => {
+  deleteFriend(token, friendId);
+  const friendIndex = friendProfiles.value.findIndex(item => item.id === friendId);
+  console.log(friendIndex)
+  friendProfiles.value.splice(friendIndex, 1)
+  fetchAllFriendsInfos();
+};
+
+const handleAcceptFriend = (friendId: string) => {
+  allFriends.value.push(friendId)
+  fetchAllFriendsInfos();
 }
 
-function handleSearch(query: string) {
-  // Handle the search logic
+const handleDeclineFriend = (friendId: string) => {
+
 }
+
+const handleTabSelection = (tab: string) => {
+  currentTab.value = tab;
+  switch (tab) {
+    case 'All':
+      fetchAllFriendsInfos();
+      break;
+    case 'Online':
+      // Implémentez la logique pour les amis en ligne
+      break;
+    case 'Pending':
+      fetchAllPendingRequests();
+      break;
+    case 'Blocked':
+      // Implémentez la logique pour les amis bloqués
+      break;
+  }
+};
+
+// Initial fetch
+onMounted(fetchAllFriendsInfos);
 </script>
