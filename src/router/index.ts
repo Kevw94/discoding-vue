@@ -34,7 +34,7 @@ const routes: Array<RouteRecordRaw> = [
 	{
 		path: '/social',
 		name: 'social',
-		component: () => import('@/views/SocialView.vue')
+		component: () => import('@/views/social/SocialView.vue')
 	},
 	{
 		path: '/params',
